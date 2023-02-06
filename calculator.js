@@ -9,17 +9,13 @@ function calcCheck() {
     return (numQueue.length == 2 && symQueue.length == 1);
 }
 function calc() {
-    console.log('entering calc')
-    console.log(numQueue, numstring, symQueue)
+
     let str = numQueue[0] + symQueue[0] + numQueue[1];
-    numstring = eval(str)
+    numstring = String(eval(str))
 
     numQueue = [];
     numQueue.push(numstring)
 
-
-    console.log('leaving calc')
-    console.log(numQueue, numstring, symQueue)
     return numstring
 
 }
@@ -30,22 +26,23 @@ function numberHandler(event) {
     }
     result.innerText += event.target.innerText
     numstring += event.target.innerText
-    console.log('in numberHandler')
-    console.log(numQueue, numstring, symQueue)
+
 }
 function clear() {
     numstring = '';
     result.innerText = 0;
 }
 function backspace() {
-    numstring = numstring.slice(0, -1)
-    if (numstring.length > 0) {
-        result.innerText = numstring
+
+    if (numQueue.length != 1 || numstring) {
+        numstring = numstring.slice(0, -1)
+        if (numstring.length > 0) {
+            result.innerText = numstring
+        }
+        else {
+            result.innerText = 0
+        }
     }
-    else {
-        result.innerText = 0
-    }
-    numQueue[numQueue.length - 1] = numstring
 }
 function divide() {
     symQueue.push('/')
@@ -77,14 +74,19 @@ function symbolHandler(event) {
 document.querySelector('main')
     .addEventListener('click', (event) => {
         if (event.target.id == 'equals') {
+
             if (numstring && symQueue.length == 1) {
+
                 numQueue.push(numstring)
+                numstring = ''
+
             }
             if (calcCheck()) {
                 nums = calc();
                 result.innerText = nums;
                 numstring = '';
                 symQueue = [];
+
             }
 
         }
@@ -101,15 +103,12 @@ document.querySelector('main')
             backspace();
         }
         if (event.target.className.includes('symbol')) {
-            console.log('sym pressed')
-            console.log(numQueue, numstring, symQueue)
-            console.log(calcCheck())
+
             if (numQueue.length == 1 && numstring && symQueue.length == 1) {
                 numQueue.push(numstring)
-                nums = calc();
-                // result.innerText = nums;
+                calc();
                 result.innerText = event.target.innerText;
-                // result.innerText = 0;
+
                 numstring = '';
                 symQueue = [];
                 symbolHandler(event)
@@ -128,8 +127,6 @@ document.querySelector('main')
                 }
 
             }
-            console.log('after symfunction')
-            console.log(numQueue, numstring, symQueue)
 
         }
 
