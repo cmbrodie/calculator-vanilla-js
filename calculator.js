@@ -25,7 +25,7 @@ function calc() {
 }
 //button event handlers
 function numberHandler(event) {
-    if (result.innerText == '0') {
+    if (result.innerText == '0' || (result.innerText in symObject)) {
         result.innerText = '';
     }
     result.innerText += event.target.innerText
@@ -60,15 +60,16 @@ function plus() {
 function subtract() {
     symQueue.push('-')
 }
+let symObject = {
+    '÷': divide,
+    '×': multiply,
+    '−': subtract,
+    '+': plus,
+}
 function symbolHandler(event) {
 
     let sym = event.target.innerText;
-    let symObject = {
-        '÷': divide,
-        '×': multiply,
-        '−': subtract,
-        '+': plus,
-    }
+
     symObject[sym]();
 }
 
@@ -107,7 +108,8 @@ document.querySelector('main')
                 numQueue.push(numstring)
                 nums = calc();
                 // result.innerText = nums;
-                result.innerText = 0;
+                result.innerText = event.target.innerText;
+                // result.innerText = 0;
                 numstring = '';
                 symQueue = [];
                 symbolHandler(event)
@@ -116,10 +118,12 @@ document.querySelector('main')
                 if (numstring) {
                     numQueue.push(numstring);
                     clear();
+                    result.innerText = event.target.innerText;
                     symbolHandler(event);
                 }
                 else if (numQueue.length == 1) {
                     clear();
+                    result.innerText = event.target.innerText;
                     symbolHandler(event);
                 }
 
