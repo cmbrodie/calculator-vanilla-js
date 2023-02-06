@@ -63,6 +63,22 @@ let symObject = {
     '−': subtract,
     '+': plus,
 }
+
+function equals() {
+    if (numstring && symQueue.length == 1) {
+
+        numQueue.push(numstring)
+        numstring = ''
+
+    }
+    if (calcCheck()) {
+        nums = calc();
+        result.innerText = nums;
+        numstring = '';
+        symQueue = [];
+
+    }
+}
 function symbolHandler(event) {
 
     let sym = event.target.innerText;
@@ -70,64 +86,62 @@ function symbolHandler(event) {
     symObject[sym]();
 }
 
+function buttonClick(event) {
+    if (event.target.id == 'equals') {
+        equals();
 
-document.querySelector('main')
-    .addEventListener('click', (event) => {
-        if (event.target.id == 'equals') {
+    }
+    if (event.target.className == 'number') {
 
-            if (numstring && symQueue.length == 1) {
+        numberHandler(event);
+    }
+    if (event.target.innerText == 'C') {
+        clear();
+        numQueue = []
+        symQueue = []
+    }
+    if (event.target.innerText == '←') {
+        backspace();
+    }
+    if (event.target.className.includes('symbol')) {
 
-                numQueue.push(numstring)
-                numstring = ''
+        if (numQueue.length == 1 && numstring && symQueue.length == 1) {
+            numQueue.push(numstring)
+            calc();
+            result.innerText = event.target.innerText;
 
-            }
-            if (calcCheck()) {
-                nums = calc();
-                result.innerText = nums;
-                numstring = '';
-                symQueue = [];
-
-            }
-
+            numstring = '';
+            symQueue = [];
+            symbolHandler(event)
         }
-        if (event.target.className == 'number') {
-
-            numberHandler(event);
-        }
-        if (event.target.innerText == 'C') {
-            clear();
-            numQueue = []
-            symQueue = []
-        }
-        if (event.target.innerText == '←') {
-            backspace();
-        }
-        if (event.target.className.includes('symbol')) {
-
-            if (numQueue.length == 1 && numstring && symQueue.length == 1) {
-                numQueue.push(numstring)
-                calc();
+        if (symQueue.length == 0) {
+            if (numstring) {
+                numQueue.push(numstring);
+                clear();
                 result.innerText = event.target.innerText;
-
-                numstring = '';
-                symQueue = [];
-                symbolHandler(event)
+                symbolHandler(event);
             }
-            if (symQueue.length == 0) {
-                if (numstring) {
-                    numQueue.push(numstring);
-                    clear();
-                    result.innerText = event.target.innerText;
-                    symbolHandler(event);
-                }
-                else if (numQueue.length == 1) {
-                    clear();
-                    result.innerText = event.target.innerText;
-                    symbolHandler(event);
-                }
-
+            else if (numQueue.length == 1) {
+                clear();
+                result.innerText = event.target.innerText;
+                symbolHandler(event);
             }
 
         }
 
-    })
+    }
+}
+
+
+
+
+function init() {
+    document.querySelector('main')
+        .addEventListener('click', (event) => {
+            buttonClick(event)
+
+
+        })
+}
+
+init()

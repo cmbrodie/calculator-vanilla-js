@@ -11,9 +11,9 @@ main {
         'row4 row4 row4 row4'
         'row5 row5 row5 row5';
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-    height: 400px;
-    width: 250px;
+    grid-template-rows: .8fr repeat(5, 1fr);
+    width: 400px;
+    height: 650px;
 }
 
 
@@ -24,7 +24,7 @@ main {
     justify-items: flex-end;
     background-color: black;
     color: white;
-    font-size: 25px;
+    font-size: 35px;
     font-family: monospace;
     padding-right: 5px;
 }
@@ -65,7 +65,7 @@ main div {
 button {
     background-color: #d8d9db;
     border: none;
-    font-size: 25px;
+    font-size: 35px;
     padding: 0px;
     margin: 0.75px;
 }
