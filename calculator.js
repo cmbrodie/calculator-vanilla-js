@@ -106,7 +106,8 @@ document.querySelector('main')
             if (numQueue.length == 1 && numstring && symQueue.length == 1) {
                 numQueue.push(numstring)
                 nums = calc();
-                result.innerText = nums;
+                // result.innerText = nums;
+                result.innerText = 0;
                 numstring = '';
                 symQueue = [];
                 symbolHandler(event)
