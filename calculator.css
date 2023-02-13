@@ -12,8 +12,8 @@ main {
         'row5 row5 row5 row5';
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: .8fr repeat(5, 1fr);
-    width: 400px;
-    height: 650px;
+    max-width: 400px;
+    max-height: 650px;
 }
 
 
