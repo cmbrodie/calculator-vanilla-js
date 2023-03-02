@@ -1,89 +1,120 @@
 //Utility Variables
-let result = document.querySelector('p')
-let numstring = '';
-let symQueue = [];
-let numQueue = [];
+let display = document.querySelector('p')
+let numberString = '';
+let symbolQueue = [];
+let numberQueue = [];
+let mathSymbols = {
+    '÷': '/',
+    '×': '*',
+    '−': '-',
+    '+': '+',
+}
 
-
-function calcCheck() {
-    return (numQueue.length == 2 && symQueue.length == 1);
+function isValidCalc() {
+    return (numberQueue.length == 2 && symbolQueue.length == 1);
 }
 function calc() {
 
-    let str = numQueue[0] + symQueue[0] + numQueue[1];
-    numstring = String(eval(str))
+    let str = numberQueue[0] + symbolQueue[0] + numberQueue[1];
+    result = String(eval(str))
 
-    numQueue = [];
-    numQueue.push(numstring)
+    numberQueue = [];
+    numberQueue.push(result)
 
-    return numstring
+    return result
 
 }
-//button event handlers
+
 function numberHandler(event) {
-    if (result.innerText == '0' || (result.innerText in symObject)) {
-        result.innerText = '';
+    if (display.innerText == '0' || (display.innerText in mathSymbols)) {
+        updateDisplay('');
     }
-    result.innerText += event.target.innerText
-    numstring += event.target.innerText
+    display.innerText += event.target.innerText
+    numberString = display.innerText
 
 }
 function clear() {
-    numstring = '';
-    result.innerText = 0;
+    numberString = '0';
+    updateDisplay(0);
 }
 function backspace() {
 
-    if (numQueue.length != 1 || numstring) {
-        numstring = numstring.slice(0, -1)
-        if (numstring.length > 0) {
-            result.innerText = numstring
+    if (numberQueue.length != 1 || numberString) {
+        numberString = numberString.slice(0, -1)
+        if (numberString.length > 0) {
+            updateDisplay(numberString)
         }
         else {
-            result.innerText = 0
+            updateDisplay(0)
         }
     }
 }
-function divide() {
-    symQueue.push('/')
+function symbolPush(symbol) {
+    symbolQueue.push(symbol)
+}
 
-}
-function multiply() {
-    symQueue.push('*')
-}
-function plus() {
-    symQueue.push('+')
-}
-function subtract() {
-    symQueue.push('-')
-}
-let symObject = {
-    '÷': divide,
-    '×': multiply,
-    '−': subtract,
-    '+': plus,
-}
 
 function equals() {
-    if (numstring && symQueue.length == 1) {
+    if (numberString && symbolQueue.length == 1) {
 
-        numQueue.push(numstring)
-        numstring = ''
+        numberQueue.push(numberString)
+        numberString = ''
 
     }
-    if (calcCheck()) {
+    if (isValidCalc()) {
         nums = calc();
-        result.innerText = nums;
-        numstring = '';
-        symQueue = [];
+        updateDisplay(nums)
+        numberString = '';
+        symbolQueue = [];
 
     }
 }
+function parseSymbol(event) {
+
+    let symbol = event.target.innerText;
+
+    return mathSymbols[symbol];
+}
+function updateDisplay(value) {
+    display.innerText = value;
+}
 function symbolHandler(event) {
+    let symbol = event.target.innerText
+    if (numberQueue.length == 1 && numberString && symbolQueue.length == 1) {
+        // commitExpression()
+        numberQueue.push(numberString)
+        calc();
+        updateDisplay(symbol)
 
-    let sym = event.target.innerText;
+        numberString = '';
+        symbolQueue = [];
+        validSymbol = parseSymbol(event);
+        symbolPush(validSymbol)
+    }
+    else if (symbolQueue.length == 0) {
+        if (numberQueue.length == 1 && numberString) {
+            numberQueue = [];
+            numberQueue.push(numberString);
+            clear();
+            updateDisplay(symbol)
+            validSymbol = parseSymbol(event);
+            symbolPush(validSymbol)
+        }
+        else if (numberString) {
+            numberQueue.push(numberString);
+            clear();
+            updateDisplay(symbol)
+            validSymbol = parseSymbol(event);
+            symbolPush(validSymbol)
+        }
+        else if (numberQueue.length == 1) {
+            clear();
+            updateDisplay(symbol)
+            validSymbol = parseSymbol(event);
+            symbolPush(validSymbol)
+        }
 
-    symObject[sym]();
+    }
 }
 
 function buttonClick(event) {
@@ -97,42 +128,17 @@ function buttonClick(event) {
     }
     if (event.target.innerText == 'C') {
         clear();
-        numQueue = []
-        symQueue = []
+        numberQueue = []
+        symbolQueue = []
     }
     if (event.target.innerText == '←') {
         backspace();
     }
     if (event.target.className.includes('symbol')) {
-
-        if (numQueue.length == 1 && numstring && symQueue.length == 1) {
-            numQueue.push(numstring)
-            calc();
-            result.innerText = event.target.innerText;
-
-            numstring = '';
-            symQueue = [];
-            symbolHandler(event)
-        }
-        if (symQueue.length == 0) {
-            if (numstring) {
-                numQueue.push(numstring);
-                clear();
-                result.innerText = event.target.innerText;
-                symbolHandler(event);
-            }
-            else if (numQueue.length == 1) {
-                clear();
-                result.innerText = event.target.innerText;
-                symbolHandler(event);
-            }
-
-        }
+        symbolHandler(event)
 
     }
 }
-
-
 
 
 function init() {
