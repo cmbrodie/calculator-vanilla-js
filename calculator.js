@@ -114,21 +114,19 @@ function symbolHandler(event) {
 function buttonClick(event) {
     if (event.target.id == 'equals') {
         equals();
-
     }
-    if (event.target.className == 'number') {
-
+    else if (event.target.className == 'number') {
         numberHandler(event);
     }
-    if (event.target.innerText == 'C') {
+    else if (event.target.innerText == 'C') {
         clear();
         numberQueue = []
         symbolQueue = []
     }
-    if (event.target.innerText == '←') {
+    else if (event.target.innerText == '←') {
         backspace();
     }
-    if (event.target.className.includes('symbol')) {
+    else if (event.target.className.includes('symbol')) {
         symbolHandler(event)
 
     }
