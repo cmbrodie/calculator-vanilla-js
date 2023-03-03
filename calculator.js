@@ -49,9 +49,7 @@ function backspace() {
         }
     }
 }
-function symbolPush(symbol) {
-    symbolQueue.push(symbol)
-}
+
 
 
 function equals() {
@@ -69,49 +67,45 @@ function equals() {
 
     }
 }
-function parseSymbol(event) {
+function parseSymbol(displaySymbol) {
 
-    let symbol = event.target.innerText;
-
-    return mathSymbols[symbol];
+    return mathSymbols[displaySymbol];
 }
+
+function pushSymbol(displaySymbol) {
+    clear()
+    updateDisplay(displaySymbol)
+    validSymbol = parseSymbol(displaySymbol);
+    symbolQueue.push(validSymbol)
+}
+
 function updateDisplay(value) {
     display.innerText = value;
 }
+
+
 function symbolHandler(event) {
-    let symbol = event.target.innerText
+    let displaySymbol = event.target.innerText
     if (numberQueue.length == 1 && numberString && symbolQueue.length == 1) {
-        // commitExpression()
         numberQueue.push(numberString)
         calc();
-        updateDisplay(symbol)
-
-        numberString = '';
         symbolQueue = [];
-        validSymbol = parseSymbol(event);
-        symbolPush(validSymbol)
+
+        pushSymbol(displaySymbol)
     }
     else if (symbolQueue.length == 0) {
         if (numberQueue.length == 1 && numberString) {
             numberQueue = [];
             numberQueue.push(numberString);
-            clear();
-            updateDisplay(symbol)
-            validSymbol = parseSymbol(event);
-            symbolPush(validSymbol)
+
+            pushSymbol(displaySymbol)
         }
         else if (numberString) {
             numberQueue.push(numberString);
-            clear();
-            updateDisplay(symbol)
-            validSymbol = parseSymbol(event);
-            symbolPush(validSymbol)
+            pushSymbol(displaySymbol)
         }
         else if (numberQueue.length == 1) {
-            clear();
-            updateDisplay(symbol)
-            validSymbol = parseSymbol(event);
-            symbolPush(validSymbol)
+            pushSymbol(displaySymbol)
         }
 
     }
