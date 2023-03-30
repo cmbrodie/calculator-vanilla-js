@@ -26,9 +26,9 @@ main {
     justify-items: flex-end;
     background-color: black;
     color: white;
-    font-size: 35px;
+    font-size: 2.25rem;
     font-family: monospace;
-    padding-right: 5px;
+    padding-right: 0.5rem;
 }
 
 main div {
@@ -67,15 +67,16 @@ main div {
 button {
     background-color: #d8d9db;
     border: none;
-    font-size: 35px;
+    font-size: 2.25rem;
     padding: 0px;
-    margin: 0.75px;
+    margin: 0.0625rem;
+    border-radius: 2px;
 }
 
 button:hover {
     background-color: rgb(227, 228, 230);
     cursor: pointer;
-    margin: 1.5px;
+    margin: 0.0875rem;
 }
 
 .orange {
